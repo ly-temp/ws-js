@@ -1,4 +1,4 @@
-const WHITELIST_GROUP = ['120363195793917061@g.us']
+const WHITELIST_GROUP = ['85263754935-1463735762@g.us']
 const DATA_PATH = '/tmp/storage/sessionData'
 
 const { Client, LocalAuth } = require('whatsapp-web.js')
