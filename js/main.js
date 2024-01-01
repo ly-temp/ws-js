@@ -49,8 +49,7 @@ async function concat_unread_msg(chat){
     var msg_strg = ''
     for(const msg of msgs){
         //console.log(`\tMsg[${msg.ack}]: ${msg.body}`)    //test
-        if(msg.ack < 3)
-            msg_strg += '\n' + msg.body
+        msg_strg += '\n' + msg.body
     }
     return msg_strg
 }
@@ -62,8 +61,6 @@ async function response_chat(chat){
     }))
 
     const msg_strg = await concat_unread_msg(chat)
-    if(msg_strg === '')
-        return
 
     const ai_json = await (await fetch(process.env.AI_URL,{
         method: 'POST',
