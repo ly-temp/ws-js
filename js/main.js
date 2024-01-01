@@ -1,7 +1,7 @@
 const WHITELIST_GROUP = ['85263754935-1463735762@g.us']
 const DATA_PATH = '/tmp/storage/sessionData'
 
-const { Client, LocalAuth } = require('whatsapp-web.js')
+const { Client, LocalAuth, MessageAck } = require('whatsapp-web.js')
 
 const client = new Client({
     authStrategy: new LocalAuth({
@@ -49,7 +49,7 @@ async function concat_unread_msg(chat){
     var msg_strg = ''
     for(const msg of msgs){
         //console.log(`\tMsg[${msg.ack}]: ${msg.body}`)    //test
-        if(!msg.fromMe)
+        if(msg.ack < 3)
             msg_strg += '\n' + msg.body
     }
     return msg_strg
