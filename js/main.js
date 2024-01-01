@@ -62,7 +62,7 @@ async function response_chat(chat){
     }))
 
     const msg_strg = await concat_unread_msg(chat)
-    if(msg === '')
+    if(msg_strg === '')
         return
 
     const ai_json = await (await fetch(process.env.AI_URL,{
