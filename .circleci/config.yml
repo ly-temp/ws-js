@@ -12,6 +12,7 @@ jobs:
           name: RUN
           command: |
             chmod +x sh/run.sh && sh/run.sh
+          no_output_timeout: 4m
 
 workflows:
   commit:
