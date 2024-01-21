@@ -43,24 +43,34 @@ function login(){
 //bot
 //https://github.com/pedroslopez/whatsapp-web.js/issues/1343
 async function concat_unread_msg(chat){
+    var ME_ALIAS = [client.info.wid.user, client.info.pushname]
+    ME_ALIAS = ME_ALIAS.map(s => '@'+s)
+    const ME_REGEX = new RegExp(ME_ALIAS.join('|'), 'i')
+
     const msgs = await chat.fetchMessages({
         limit: chat.unreadCount
     })
+    var mentioned_me = false
     var msg_strg = ''
     for(const msg of msgs){
         //console.log(`\tMsg[${msg.ack}]: ${msg.body}`)    //test
+        //console.log((await msg.getMentions()))
+
+        mentioned_me = mentioned_me || ME_REGEX.test(msg.body)
         msg_strg += '\n' + msg.body
     }
-    return msg_strg
+    return {mentioned_me: mentioned_me, msg_strg: msg_strg}
 }
 async function response_chat(chat){
-    console.log('responsed: '+JSON.stringify({
+    const {mentioned_me, msg_strg} = await concat_unread_msg(chat)
+
+    const require_res = !chat.isGroup || (WHITELIST_GROUP.includes(chat.id._serialized) && mentioned_me)
+
+    console.log(`res[${require_res}]: `+JSON.stringify({
         name: chat.name,
         id: chat.id._serialized,
         count: chat.unreadCount
     }))
-
-    const msg_strg = await concat_unread_msg(chat)
 
     const ai_json = await (await fetch(process.env.AI_URL,{
         method: 'POST',
@@ -72,35 +82,14 @@ async function response_chat(chat){
             num: chat.id._serialized,
             name: chat.name,
             text: msg_strg,
-            require_res: true
+            require_res: require_res
         })
     })).json()
 
-    await chat.sendMessage("[System]:\nYour message is redirected. I will response soon.\n你的信息已轉達，將盡快回覆。")
-    await chat.sendMessage("[laiyuan Bot]:\n"+ai_json[0].response)
-}
-async function skip_chat(chat){
-    console.log('skipped: '+JSON.stringify({
-        name: chat.name,
-        id: chat.id._serialized,
-        count: chat.unreadCount
-    }))
-
-    const msg_strg = await concat_unread_msg(chat)
-
-    await fetch(process.env.AI_URL,{
-        method: 'POST',
-        headers:{
-            'Content-Type': 'application/json',
-            Authorization: process.env.INCOME_API_KEY
-        },
-        body:JSON.stringify({
-            num: chat.id._serialized,
-            name: chat.name,
-            text: msg_strg,
-            require_res: false
-        })
-    })
+    if(require_res){
+        await chat.sendMessage("[System]:\nYour message is redirected. I will response soon.\n你的信息已轉達，將盡快回覆。")
+        await chat.sendMessage("[laiyuan Bot]:\n"+ai_json[0].response)
+    }
 }
 
 function bot(){
@@ -110,14 +99,10 @@ function bot(){
         console.log('Client ready')
         const chats = await client.getChats()
         for(const chat of chats){
-            if(chat.unreadCount > 0){
-                if(!chat.isGroup || WHITELIST_GROUP.includes(chat.id._serialized))
+            if(chat.unreadCount > 0)
                     await response_chat(chat)
-                else
-                    await skip_chat(chat)
                 //const sent_msg = await chat.sendMessage("received!")
                 //const sent_msg = await client.sendMessage(chat.id._serialized, '[Test] Laiyuan-Bot has received message!')
-            }
         }
         setTimeout(()=>{
             client.destroy()
