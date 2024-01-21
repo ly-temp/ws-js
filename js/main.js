@@ -99,8 +99,10 @@ function bot(){
         console.log('Client ready')
         const chats = await client.getChats()
         for(const chat of chats){
-            if(chat.unreadCount > 0)
+            if(chat.unreadCount > 0){
                     await response_chat(chat)
+                    await chat.sendSeen()
+            }
                 //const sent_msg = await chat.sendMessage("received!")
                 //const sent_msg = await client.sendMessage(chat.id._serialized, '[Test] Laiyuan-Bot has received message!')
         }
