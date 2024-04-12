@@ -1,5 +1,6 @@
 const WHITELIST_GROUP = ['85263754935-1463735762@g.us']
 const DATA_PATH = '/tmp/storage/sessionData'
+const WA_VERSION='2.2412.54'
 
 const { Client, LocalAuth, MessageAck } = require('whatsapp-web.js')
 
@@ -7,7 +8,11 @@ const client = new Client({
     authStrategy: new LocalAuth({
         dataPath: DATA_PATH
     }),
-    puppeteer: {args: ['--no-sandbox']}
+    puppeteer: {args: ['--no-sandbox']},
+    webVersionCache: {
+        type: 'remote',
+        remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${WA_VERSION}.html`,
+    },
 })
 
 client.on('authenticated', (session) => {
