@@ -72,7 +72,7 @@ async function response_chat(chat){
     const {mentioned_me, msg_strg, any_in_contact} = await concat_unread_msg(chat)
 
     const require_res = (!chat.isGroup && any_in_contact)
-        || (WHITELIST_GROUP.includes(chat.id._serialized) && mentioned_me)
+        || (chat.isGroup && WHITELIST_GROUP.includes(chat.id._serialized) && mentioned_me)
 
     console.log(`res[${require_res}]: `+JSON.stringify({
         name: chat.name,
