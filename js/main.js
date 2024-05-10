@@ -1,4 +1,4 @@
-const WHITELIST_GROUP = ['85263754935-1463735762@g.us']
+const WHITELIST_GROUP = process.env.WHITELIST_GROUP.split(' ')    //id_serialized ['85263754935-1463735762@g.us']
 const DATA_PATH = '/tmp/storage/sessionData'
 const WA_VERSION='2.2412.54'
 
@@ -57,19 +57,22 @@ async function concat_unread_msg(chat){
     })
     var mentioned_me = false
     var msg_strg = ''
+    var any_in_contact = false;
     for(const msg of msgs){
         //console.log(`\tMsg[${msg.ack}]: ${msg.body}`)    //test
         //console.log((await msg.getMentions()))
 
-        mentioned_me = mentioned_me || ME_REGEX.test(msg.body)
+        mentioned_me |= ME_REGEX.test(msg.body)
+        in_contact |= msg.isMyContact
         msg_strg += '\n' + msg.body
     }
-    return {mentioned_me: mentioned_me, msg_strg: msg_strg}
+    return {mentioned_me: mentioned_me, msg_strg: msg_strg, any_in_contact: any_in_contact}
 }
 async function response_chat(chat){
-    const {mentioned_me, msg_strg} = await concat_unread_msg(chat)
+    const {mentioned_me, msg_strg, any_in_contact} = await concat_unread_msg(chat)
 
-    const require_res = !chat.isGroup || (WHITELIST_GROUP.includes(chat.id._serialized) && mentioned_me)
+    const require_res = (!chat.isGroup && any_in_contact)
+        || (WHITELIST_GROUP.includes(chat.id._serialized) && mentioned_me)
 
     console.log(`res[${require_res}]: `+JSON.stringify({
         name: chat.name,
@@ -105,8 +108,8 @@ function bot(){
         const chats = await client.getChats()
         for(const chat of chats){
             if(chat.unreadCount > 0){
-                    await response_chat(chat)
-                    await chat.sendSeen()
+                await response_chat(chat)
+                await chat.sendSeen()
             }
                 //const sent_msg = await chat.sendMessage("received!")
                 //const sent_msg = await client.sendMessage(chat.id._serialized, '[Test] Laiyuan-Bot has received message!')
