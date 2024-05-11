@@ -69,7 +69,7 @@ async function concat_unread_msg(chat){
 async function response_chat(chat){
     const {mentioned_me, msg_strg} = await concat_unread_msg(chat)
 
-    const in_contact = chat.name.charAt(0) === '+';
+    const in_contact = chat.name.charAt(0) !== '+';
     const require_res = (!chat.isGroup && (in_contact || mentioned_me) )
         || (chat.isGroup && WHITELIST_GROUP.includes(chat.id._serialized) && mentioned_me)
 
