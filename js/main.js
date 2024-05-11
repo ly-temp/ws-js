@@ -76,8 +76,7 @@ async function response_chat(chat){
     console.log(`res[${require_res}]: `+JSON.stringify({
         name: chat.name,
         id: chat.id._serialized,
-        count: chat.unreadCount,
-        in_contact: in_contact
+        count: chat.unreadCount
     }))
 
     const ai_json = await (await fetch(process.env.AI_URL,{
