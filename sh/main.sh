@@ -15,15 +15,18 @@ case $MODE in
         #sh/storage.sh decrypt
         startNode login
         sh/storage.sh encrypt
+        sh/artifact.sh upload
         ;;
     list)
         sh/storage.sh decrypt
-        rm flag/list
+        #rm flag/list
         startNode list
+        sh/artifact.sh upload
         ;;
     bot)
         sh/storage.sh decrypt
         startNode bot
         sh/storage.sh encrypt
+        sh/artifact.sh upload
         ;;
 esac
