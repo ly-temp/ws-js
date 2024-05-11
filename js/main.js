@@ -63,7 +63,7 @@ async function concat_unread_msg(chat){
         //console.log((await msg.getMentions()))
 
         mentioned_me |= ME_REGEX.test(msg.body)
-        in_contact |= msg.isMyContact
+        any_in_contact |= msg.isMyContact
         msg_strg += '\n' + msg.body
     }
     return {mentioned_me: mentioned_me, msg_strg: msg_strg, any_in_contact: any_in_contact}
