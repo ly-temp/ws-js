@@ -57,28 +57,27 @@ async function concat_unread_msg(chat){
     })
     var mentioned_me = false
     var msg_strg = ''
-    var any_in_contact = false;
     for(const msg of msgs){
         //console.log(`\tMsg[${msg.ack}]: ${msg.body}`)    //test
         //console.log((await msg.getMentions()))
 
         mentioned_me |= ME_REGEX.test(msg.body)
-        any_in_contact |= msg.isMyContact
         msg_strg += '\n' + msg.body
     }
-    return {mentioned_me: mentioned_me, msg_strg: msg_strg, any_in_contact: any_in_contact}
+    return {mentioned_me: mentioned_me, msg_strg: msg_strg}
 }
 async function response_chat(chat){
-    const {mentioned_me, msg_strg, any_in_contact} = await concat_unread_msg(chat)
+    const {mentioned_me, msg_strg} = await concat_unread_msg(chat)
 
-    const require_res = (!chat.isGroup && (any_in_contact || mentioned_me) )
+    const in_contact = chat.name.charAt(0) === '+';
+    const require_res = (!chat.isGroup && (in_contact || mentioned_me) )
         || (chat.isGroup && WHITELIST_GROUP.includes(chat.id._serialized) && mentioned_me)
 
     console.log(`res[${require_res}]: `+JSON.stringify({
         name: chat.name,
         id: chat.id._serialized,
         count: chat.unreadCount,
-        any_in_contact: any_in_contact
+        in_contact: in_contact
     }))
 
     const ai_json = await (await fetch(process.env.AI_URL,{
