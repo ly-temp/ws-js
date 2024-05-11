@@ -90,7 +90,7 @@ async function response_chat(chat){
             num: chat.id._serialized,
             name: chat.name,
             text: msg_strg,
-            require_res: require_res,
+            require_res: require_res
         })
     })).json()
 
