@@ -96,7 +96,7 @@ async function response_chat(chat){
     })).json()
 
     if(require_res){
-        await chat.sendMessage("[System]:\nYour message is redirected. I will response soon.\n你的信息已轉達，將盡快回覆。")
+        await chat.sendMessage("[System]:\nYour message is email-forwarded. I will response soon.\n你的信息已轉達電郵，將盡快回覆。")
         await chat.sendMessage("[laiyuan Bot]:\n"+ai_json[0].response)
     }
 }
