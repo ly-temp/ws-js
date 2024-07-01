@@ -82,11 +82,12 @@ async function response_chat(chat){
     }))
 
     const ai_json = await (await fetch(process.env.AI_URL,{
-        method: 'POST',
+        method:'POST',
         headers:{
             'Content-Type': 'application/json',
             Authorization: process.env.INCOME_API_KEY
         },
+        title:'Whatsapp',
         body:JSON.stringify({
             num: chat.id._serialized,
             name: chat.name,
