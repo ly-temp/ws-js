@@ -87,12 +87,14 @@ async function response_chat(chat){
             'Content-Type': 'application/json',
             Authorization: process.env.INCOME_API_KEY
         },
-        title:'Whatsapp',
         body:JSON.stringify({
-            num: chat.id._serialized,
-            name: chat.name,
-            text: msg_strg,
-            require_res: require_res
+            title:'Whatsapp',
+            body:{
+                num: chat.id._serialized,
+                name: chat.name,
+                text: msg_strg,
+                require_res: require_res
+            }
         })
     })).json()
 
