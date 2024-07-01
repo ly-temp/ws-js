@@ -1,6 +1,6 @@
 const WHITELIST_GROUP = process.env.WHITELIST_GROUP.split(' ')    //id_serialized ['85263754935-1463735762@g.us']
 const DATA_PATH = '/tmp/storage/sessionData'
-const WA_VERSION='2.3000.1014580163-alpha'
+const WA_VERSION='2.3000.1012440038-alpha'
 
 const { Client, LocalAuth, MessageAck } = require('whatsapp-web.js')
 
