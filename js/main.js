@@ -118,7 +118,7 @@ function bot(){
         }
         setTimeout(()=>{
             client.destroy()
-        }, 30 *1000)
+        }, 15 *1000)
     })
 
     /**
