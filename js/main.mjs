@@ -1,8 +1,11 @@
 const WHITELIST_GROUP = process.env.WHITELIST_GROUP.split(' ')    //id_serialized ['85263754935-1463735762@g.us']
 const DATA_PATH = '/tmp/storage/sessionData'
-const WA_VERSION='2.3000.1014020809-alpha'
+const WA_VERSION='2.3000.1015811744-alpha'
 
-const { Client, LocalAuth, MessageAck } = require('whatsapp-web.js')
+import whatsapp_web_pkg from 'whatsapp-web.js'
+const { Client, LocalAuth } = whatsapp_web_pkg
+import fs from 'fs'
+import qrcode from 'qrcode-terminal'
 
 const client = new Client({
     authStrategy: new LocalAuth({
@@ -20,7 +23,6 @@ client.on('authenticated', (session) => {
 })
 
 function check_session_exist(){
-    const fs = require('fs')
     if(!fs.existsSync(DATA_PATH)){
         console.log('[ERROR] Session Data not exist!')
         client.destroy()
@@ -28,7 +30,6 @@ function check_session_exist(){
 }
 
 function login(){
-    const qrcode = require('qrcode-terminal')
 
     client.on('qr', qr => {
         qrcode.generate(qr, {small: true})
@@ -64,13 +65,13 @@ async function concat_unread_msg(chat){
         mentioned_me |= ME_REGEX.test(msg.body)
         msg_strg += '\n' + msg.body
     }
-    return {mentioned_me: mentioned_me, msg_strg: msg_strg}
+    return {mentioned_me, msg_strg}
 }
 async function response_chat(chat){
     const {mentioned_me, msg_strg} = await concat_unread_msg(chat)
 
-    const in_contact = chat.name.charAt(0) !== '+';
-    const require_res = (!chat.isGroup && (in_contact || mentioned_me) )
+    const in_whitelist = chat.name.charAt(0) === '~';
+    const require_res = (!chat.isGroup && (in_whitelist || mentioned_me) )
         || (chat.isGroup && WHITELIST_GROUP.includes(chat.id._serialized) && mentioned_me)
 
     console.log(`res[${require_res}]: `+JSON.stringify({
@@ -78,7 +79,7 @@ async function response_chat(chat){
         id: chat.id._serialized,
         count: chat.unreadCount,
         mentioned_me: mentioned_me,
-        in_contact: in_contact
+        in_whitelist: in_whitelist
     }))
 
     const ai_json = await (await fetch(process.env.AI_URL,{
@@ -99,8 +100,7 @@ async function response_chat(chat){
     })).json()
 
     if(require_res){
-        await chat.sendMessage("[System]:\nYour message is email-forwarded. I will response soon.\n你的信息已轉達電郵，將盡快回覆。")
-        await chat.sendMessage("[laiyuan Bot]:\n"+ai_json.response)
+        await chat.sendMessage("[System]:\nemail-forwarded 已轉達電郵"+"\n[laiyuan Bot]:\n"+ai_json.response)
     }
 }
 
