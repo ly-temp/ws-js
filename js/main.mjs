@@ -127,7 +127,7 @@ function bot(){
 
     client.on('ready', async()=>{
         console.log('Client ready')
-        const unread_chats = (await client.getChats()).filter(chat=>chat.unreadCount>0)
+        const unread_chats = (await client.getChats()).filter(chat=>chat.unreadCount)
         if(unread_chats.length)
             await handle_unread_chats(unread_chats)
         setTimeout(()=>{
