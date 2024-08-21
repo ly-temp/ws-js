@@ -77,7 +77,6 @@ function bot(){
         const chats_details = await Promise.all(
             unread_chats.map(async chat=>{
                 const {mentioned_me, msg_strg} = await concat_unread_msg(chat)
-                console.log({mentioned_me})
                 const in_whitelist = chat.name.charAt(0) === '~';
                 const require_res = (!chat.isGroup && (in_whitelist || mentioned_me) )
                     || (chat.isGroup && WHITELIST_GROUP.includes(chat.id._serialized) && mentioned_me)
@@ -101,7 +100,6 @@ function bot(){
                 }
             })
         )
-        console.log(chats_details)
         
         const ai_json = await (await fetch(process.env.AI_URL,{
             method:'POST',
