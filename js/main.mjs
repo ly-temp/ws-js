@@ -1,4 +1,5 @@
 const WHITELIST_GROUP = process.env.WHITELIST_GROUP.split(' ')    //id_serialized ['85263754935-1463735762@g.us']
+const {WEBHOOK_URL, WEBHOOK_KEY} = process.env
 const DATA_PATH = '/tmp/storage/sessionData'
 const WA_VERSION='2.3000.1015811744-alpha'
 
@@ -101,11 +102,11 @@ function bot(){
             })
         )
         
-        const ai_json = await (await fetch(process.env.AI_URL,{
+        const ai_json = await (await fetch(WEBHOOK_URL,{
             method:'POST',
             headers:{
                 'Content-Type': 'application/json',
-                Authorization: process.env.INCOME_API_KEY
+                Authorization: WEBHOOK_KEY
             },
             body:JSON.stringify({
                 title:'Whatsapp',
