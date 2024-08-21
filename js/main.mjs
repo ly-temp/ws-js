@@ -115,7 +115,7 @@ function bot(){
             })
         })).json()
 
-        console.log(ai_json)
+        //console.log(ai_json)
 
         await Promise.all(ai_json.response.map(async({id, ai_output})=>{
             const chats_detail = chats_details.find(e=>e.body.id === id)
