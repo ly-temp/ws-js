@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh -e
 case $1 in
     encrypt)
         rm -f /tmp/storage.7z

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh -e
 
 startNode(){
     JS_MAIN_DIR=$(realpath js/main.mjs)

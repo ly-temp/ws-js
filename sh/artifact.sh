@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh -e
 
-[ "$1" == upload ] && \
+[ "$1" = upload ] && \
     curl -sX POST \
     -H "Authorization: Bearer $ARTIFACT_TK" \
     "https://api.bitbucket.org/2.0/repositories/${BB_WORKSPACE}/${BB_REPO_SLUG}/downloads" \
