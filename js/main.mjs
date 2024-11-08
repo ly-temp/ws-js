@@ -1,7 +1,7 @@
 const WHITELIST_GROUP = process.env.WHITELIST_GROUP.split(' ')    //id_serialized ['85263754935-1463735762@g.us']
 const {WEBHOOK_URL, WEBHOOK_KEY} = process.env
 const DATA_PATH = '/tmp/storage/sessionData'
-const WA_VERSION='2.3000.1018062971-alpha'
+const WA_VERSION='2.3000.1018022368-alpha'
 
 import whatsapp_web_pkg from 'whatsapp-web.js'
 const { Client, LocalAuth } = whatsapp_web_pkg
