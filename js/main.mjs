@@ -1,4 +1,4 @@
-const WHITELIST_GROUP = process.env.WHITELIST_GROUP.split(' ')    //id_serialized ['85263754935-1463735762@g.us']
+const WHITELIST_GROUP = process.env.WHITELIST_GROUP.split(' ')    //id_serialized ['85263754935-1463735762@g.us', '120363364316832497@g.us']
 const {WEBHOOK_URL, WEBHOOK_KEY} = process.env
 const DATA_PATH = '/tmp/storage/sessionData'
 const WA_VERSION='2.3000.1017341291-alpha'
