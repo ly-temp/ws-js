@@ -39,6 +39,7 @@ function login(){
     client.on('ready', () => {
         console.log('Client ready!')
         setTimeout(()=>{
+            console.log('Client destroy')
             client.destroy()
         }, 30 *1000)
         //client.destroy()
