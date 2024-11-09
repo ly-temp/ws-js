@@ -41,7 +41,7 @@ function login(){
         setTimeout(()=>{
             client.destroy()
         }, 30 *1000)
-        client.destroy()
+        //client.destroy()
     })
 
     client.initialize()
