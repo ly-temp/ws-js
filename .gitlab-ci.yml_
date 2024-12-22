@@ -1,0 +1,7 @@
+stages:
+  - run
+
+run-job:
+  stage: run
+  script:
+    - chmod +x sh/run.sh && sh/run.sh
