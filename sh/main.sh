@@ -13,20 +13,20 @@ case $MODE in
         #sh/storage.sh decrypt
         startNode login
         sh/storage.sh encrypt
-        sh/artifact.sh upload
+        sh/artifact.s3.sh upload
         ;;
     list)
-        sh/artifact.sh download
+        sh/artifact.s3.sh download
         sh/storage.sh decrypt
         #rm flag/list
         startNode list
-        sh/artifact.sh upload
+        sh/artifact.s3.sh upload
         ;;
     bot)
-        sh/artifact.sh download
+        sh/artifact.s3.sh download
         sh/storage.sh decrypt
         startNode bot
         sh/storage.sh encrypt
-        sh/artifact.sh upload
+        sh/artifact.s3.sh upload
         ;;
 esac
