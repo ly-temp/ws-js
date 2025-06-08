@@ -6,7 +6,7 @@ REG_SER="$S3_REGION"
 
 OPT=(-H 'x-amz-content-sha256: UNSIGNED-PAYLOAD')
 fnameEncode=ws-js.storage.7z
-file=./storage.7z
+file=/tmp/storage.7z
 
 s3Put(){
         id=$(curl -sL -X PUT "$B/$fnameEncode" \
